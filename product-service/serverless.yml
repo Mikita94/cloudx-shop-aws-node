@@ -1,0 +1,53 @@
+service: product-service
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-central-1
+  httpApi:
+    cors: true
+
+functions:
+  getProductsList:
+    handler: functions/index.getProductsList
+    events:
+      - httpApi:
+          path: /products
+          method: get
+          responseData:
+            200:
+              description: Successful response
+              bodyType: GetProductsListResponse
+            500:
+              description: Unknown server error
+              bodyType: ErrorResponse
+
+  getProductById:
+    handler: functions/index.getProductById
+    events:
+      - httpApi:
+          path: /products/{productId}
+          method: get
+          responseData:
+            200:
+              description: Successful response
+              bodyType: Product
+            404:
+              description: Product not found
+              bodyType: ErrorResponse
+            500:
+              description: Unknown server error
+              bodyType: ErrorResponse
+
+plugins:
+  - serverless-auto-swagger
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true
+  autoswagger:
+    typefiles: ['./interfaces/product.d.ts', './interfaces/api.d.ts']

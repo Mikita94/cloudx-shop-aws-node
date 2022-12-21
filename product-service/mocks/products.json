@@ -1,0 +1,60 @@
+{
+  "products": [
+    {
+      "count": 4,
+      "description": "50x70, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80aa",
+      "price": 217,
+      "title": "Quiet morning on the river"
+    },
+    {
+      "count": 6,
+      "description": "60x80, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a0",
+      "price": 144,
+      "title": "Mountain view"
+    },
+    {
+      "count": 7,
+      "description": "66x66, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a2",
+      "price": 136,
+      "title": "Autumn clouds"
+    },
+    {
+      "count": 12,
+      "description": "50x80, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a1",
+      "price": 300,
+      "title": "In the autumn forest"
+    },
+    {
+      "count": 7,
+      "description": "140x140, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73c48a80a3",
+      "price": 520,
+      "title": "Christmas Forest"
+    },
+    {
+      "count": 8,
+      "description": "25x25, canvas on cardboard, oil",
+      "id": "7567ec4b-b10c-48c5-9345-fc73348a80a1",
+      "price": 150,
+      "title": "Fruits"
+    },
+    {
+      "count": 2,
+      "description": "60x80, canvas, oil",
+      "id": "7567ec4b-b10c-48c5-9445-fc73c48a80a2",
+      "price": 215,
+      "title": "A walk in the woods"
+    },
+    {
+      "count": 3,
+      "description": "60x80, canvas, oil",
+      "id": "7567ec4b-b10c-45c5-9345-fc73c48a80a1",
+      "price": 45,
+      "title": "Southern city"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+# IDEs
+.idea
+
+# package directories
+product-service/node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+# Documentation
+swagger
+
+# Testing
+coverage
