@@ -8,6 +8,8 @@
       "@interfaces/*": ["interfaces/*"],
       "@functions": ["functions/index.ts"],
       "@functions/*": ["functions/*"],
+      "@utils": ["utils/index.ts"],
+      "@utils/*": ["utils/*"],
       "@mocks/*": ["mocks/*"]
     },
     "resolveJsonModule": true,

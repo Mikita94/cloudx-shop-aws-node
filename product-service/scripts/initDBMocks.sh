@@ -1,0 +1,18 @@
+# Filling Products table
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80aa" }, "title": { "S": "Quiet morning on the river" }, "description": { "S": "50x70, canvas, oil" }, "price": { "N": "217" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a0" }, "title": { "S": "Mountain view" }, "description": { "S": "60x80, canvas, oil" }, "price": { "N": "144" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a2" }, "title": { "S": "Autumn clouds" }, "description": { "S": "66x66, canvas, oil" }, "price": { "N": "136" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a1" }, "title": { "S": "In the autumn forest" }, "description": { "S": "50x80, canvas, oil" }, "price": { "N": "300" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a3" }, "title": { "S": "Christmas Forest" }, "description": { "S": "140x140, canvas, oil" }, "price": { "N": "520" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9345-fc73348a80a1" }, "title": { "S": "Fruits" }, "description": { "S": "25x25, canvas on cardboard, oil" }, "price": { "N": "150" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-48c5-9445-fc73c48a80a2" }, "title": { "S": "A walk in the woods" }, "description": { "S": "60x80, canvas, oil" }, "price": { "N": "215" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Products --item '{ "id": { "S": "7567ec4b-b10c-45c5-9345-fc73c48a80a1" }, "title": { "S": "Southern city" }, "description": { "S": "60x80, canvas, oil" }, "price": { "N": "45" } }'
+# Filling Stocks table
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80aa" }, "count": { "N": "4" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a0" }, "count": { "N": "6" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a2" }, "count": { "N": "7" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a1" }, "count": { "N": "12" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73c48a80a3" }, "count": { "N": "7" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9345-fc73348a80a1" }, "count": { "N": "8" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-48c5-9445-fc73c48a80a2" }, "count": { "N": "2" } }'
+aws dynamodb put-item --region eu-central-1 --table-name Stocks --item '{ "product_id": { "S": "7567ec4b-b10c-45c5-9345-fc73c48a80a1" }, "count": { "N": "3" } }'

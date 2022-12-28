@@ -2,11 +2,22 @@ service: product-service
 frameworkVersion: '3'
 
 provider:
+  environment:
+    REGION: eu-central-1
+    PRODUCTS_TABLE: Products
+    STOCKS_TABLE: Stocks
   name: aws
   runtime: nodejs18.x
-  region: eu-central-1
+  region: ${self:provider.environment.REGION}
   httpApi:
     cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:*
+          Resource: arn:aws:dynamodb:${self:provider.environment.REGION}:*:*
 
 functions:
   getProductsList:
@@ -35,6 +46,24 @@ functions:
               bodyType: Product
             404:
               description: Product not found
+              bodyType: ErrorResponse
+            500:
+              description: Unknown server error
+              bodyType: ErrorResponse
+
+  createProduct:
+    handler: functions/index.createProduct
+    events:
+      - httpApi:
+          path: /products
+          method: post
+          bodyType: NewProduct
+          responseData:
+            200:
+              description: Successful response
+              bodyType: Product
+            400:
+              description: Product data is invalid
               bodyType: ErrorResponse
             500:
               description: Unknown server error
