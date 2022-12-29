@@ -27,6 +27,7 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
         });
         const dbClientProvider = new DBClientProvider({ region: REGION });
         const result = await dbClientProvider.docClient.send(putProduct);
+        dbClientProvider.destroyClients();
         if (result.$metadata.httpStatusCode !== 200) {
             throw new Error('DB error');
         }

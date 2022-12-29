@@ -70,6 +70,7 @@ functions:
               bodyType: ErrorResponse
 
 plugins:
+  - serverless-export-env
   - serverless-auto-swagger
   - serverless-webpack
 
