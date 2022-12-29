@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuid } from 'uuid';
 
 import { ErrorResponse } from '@interfaces/api';
@@ -21,12 +21,16 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
         const id = uuid();
         const product = { id, title, description, price };
         const { REGION, PRODUCTS_TABLE } = process.env;
-        const putProduct = new PutCommand({
-            TableName: PRODUCTS_TABLE,
-            Item: product,
+        const transaction = new TransactWriteCommand({
+            TransactItems: [{
+                Put: {
+                    TableName: PRODUCTS_TABLE,
+                    Item: product,
+                },
+            }],
         });
         const dbClientProvider = new DBClientProvider({ region: REGION });
-        const result = await dbClientProvider.docClient.send(putProduct);
+        const result = await dbClientProvider.docClient.send(transaction);
         dbClientProvider.destroyClients();
         if (result.$metadata.httpStatusCode !== 200) {
             throw new Error('DB error');

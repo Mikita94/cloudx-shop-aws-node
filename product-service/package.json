@@ -14,6 +14,7 @@
     "@jest/globals": "^29.3.1",
     "@types/aws-lambda": "^8.10.109",
     "@types/uuid": "^9.0.0",
+    "aws-crt": "^1.15.5",
     "aws-lambda": "^1.0.7",
     "aws-lambda-mock-context": "^3.2.1",
     "dotenv": "^16.0.3",

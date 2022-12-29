@@ -23,6 +23,7 @@ export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayPr
             dbClientProvider.docClient.send(productQuery).then(res => res.Item as BasicProduct),
             dbClientProvider.docClient.send(stockQuery).then(res => res.Item as Stock)
         ]);
+        dbClientProvider.destroyClients();
         if (product) {
             const body: GetProductByIdResponse = Object.assign(product, { count: stock?.count || 0 });
             return {
