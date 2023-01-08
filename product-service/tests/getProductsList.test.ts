@@ -9,6 +9,7 @@ describe('Test getProductsList lambda function', () => {
         const event = {} as APIGatewayProxyEvent;
         const result = await getProductsList(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
+        console.log('RESULT', result, result.body);
         expect((parsedResult || []).length).toBeGreaterThan(0);
         expect(result.statusCode).toEqual(200);
     });

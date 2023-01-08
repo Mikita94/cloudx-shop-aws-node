@@ -1,15 +1,31 @@
-import { APIGatewayProxyHandler } from 'aws-lambda';
-import { APIGatewayProxyEvent } from 'aws-lambda/trigger/api-gateway-proxy';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
+import { GetCommand } from '@aws-sdk/lib-dynamodb';
 
-import productsMock from '@mocks/products.json';
 import { ErrorResponse, GetProductByIdResponse } from '@interfaces/api';
+import { BasicProduct, Stock } from '@interfaces/product';
+import { DBClientProvider } from '@utils';
 
 export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     try {
-        const requestedProduct = productsMock.products
-            .find(product => product.id === event.pathParameters?.productId);
-        if (requestedProduct) {
-            const body: GetProductByIdResponse = requestedProduct;
+        console.log('getProductById', JSON.stringify(event));
+        const requestedProductId = event.pathParameters?.productId;
+        const { REGION, PRODUCTS_TABLE, STOCKS_TABLE } = process.env;
+        const dbClientProvider = new DBClientProvider({ region: REGION });
+        const productQuery = new GetCommand({
+            TableName: PRODUCTS_TABLE,
+            Key: { id: requestedProductId },
+        });
+        const stockQuery = new GetCommand({
+            TableName: STOCKS_TABLE,
+            Key: { product_id: requestedProductId },
+        });
+        const [ product, stock ] = await Promise.all([
+            dbClientProvider.docClient.send(productQuery).then(res => res.Item as BasicProduct),
+            dbClientProvider.docClient.send(stockQuery).then(res => res.Item as Stock)
+        ]);
+        dbClientProvider.destroyClients();
+        if (product) {
+            const body: GetProductByIdResponse = Object.assign(product, { count: stock?.count || 0 });
             return {
                 statusCode: 200,
                 body: JSON.stringify(body),
