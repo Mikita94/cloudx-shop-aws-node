@@ -1,11 +1,11 @@
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { GetCommand } from '@aws-sdk/lib-dynamodb';
 
 import { ErrorResponse, GetProductByIdResponse } from '@interfaces/api';
 import { BasicProduct, Stock } from '@interfaces/product';
 import { DBClientProvider } from '@utils';
 
-export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     try {
         console.log('getProductById', JSON.stringify(event));
         const requestedProductId = event.pathParameters?.productId;
@@ -28,18 +28,12 @@ export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayPr
             const body: GetProductByIdResponse = Object.assign(product, { count: stock?.count || 0 });
             return {
                 statusCode: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify(body),
             };
         }
         const body: ErrorResponse = { message: 'Product not found' };
         return {
             statusCode: 404,
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(body),
         };
     } catch (error: unknown) {
@@ -50,9 +44,6 @@ export const getProductById: APIGatewayProxyHandler = async (event: APIGatewayPr
         const body: ErrorResponse = { message };
         return {
             statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(body),
         };
     }

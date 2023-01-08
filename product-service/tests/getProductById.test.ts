@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
-import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
+import AWSMockLambdaContext from 'aws-lambda-mock-context';
 
 import { getProductById } from '@functions';
 
@@ -10,7 +11,7 @@ describe('Test getProductById lambda function', () => {
                 productId: '7567ec4b-b10c-48c5-9345-fc73348a80a1',
             } as unknown,
         } as APIGatewayProxyEvent;
-        const result = await getProductById(event, {} as Context, () => {}) as APIGatewayProxyResult;
+        const result = await getProductById(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
         expect(parsedResult).toBeDefined();
         expect(result.statusCode).toEqual(200);
@@ -22,7 +23,7 @@ describe('Test getProductById lambda function', () => {
                 productId: 'fakeId',
             } as unknown,
         } as APIGatewayProxyEvent;
-        const result = await getProductById(event, {} as Context, () => {}) as APIGatewayProxyResult;
+        const result = await getProductById(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
         expect(parsedResult?.message).toBeDefined();
         expect(result.statusCode).toEqual(404);

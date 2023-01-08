@@ -16,6 +16,7 @@
     "@types/uuid": "^9.0.0",
     "aws-crt": "^1.15.5",
     "aws-lambda": "^1.0.7",
+    "aws-lambda-mock-context": "^3.2.1",
     "dotenv": "^16.0.3",
     "serverless-auto-swagger": "^2.12.0",
     "serverless-export-env": "^2.2.0",

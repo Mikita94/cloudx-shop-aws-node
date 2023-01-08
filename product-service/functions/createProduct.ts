@@ -1,4 +1,4 @@
-import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
 import { TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
 import { v4 as uuid } from 'uuid';
 
@@ -6,7 +6,7 @@ import { ErrorResponse } from '@interfaces/api';
 import { BasicProduct } from '@interfaces/product';
 import { DBClientProvider } from '@utils';
 
-export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
     try {
         console.log('createProduct', JSON.stringify(event));
         const body = event.body && JSON.parse(event.body) || {};
@@ -14,9 +14,6 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
             const body: ErrorResponse = { message: 'Invalid Product structure' };
             return {
                 statusCode: 400,
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify(body),
             };
         }
@@ -40,9 +37,6 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
         }
         return {
             statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(Object.assign(product, { count: 0 })),
         };
     } catch (error: unknown) {
@@ -53,9 +47,6 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
         const body: ErrorResponse = { message };
         return {
             statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json',
-            },
             body: JSON.stringify(body),
         };
     }

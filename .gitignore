@@ -2,7 +2,7 @@
 .idea
 
 # package directories
-node_modules
+product-service/node_modules
 jspm_packages
 
 # Serverless directories
