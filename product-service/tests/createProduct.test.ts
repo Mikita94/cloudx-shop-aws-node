@@ -1,6 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import AWSMockLambdaContext from 'aws-lambda-mock-context';
+import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 
 import { createProduct } from '@functions';
 
@@ -14,7 +13,7 @@ describe('Test createProduct lambda function', () => {
         const event = {
             body: JSON.stringify(body),
         } as APIGatewayProxyEvent;
-        const result = await createProduct(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
+        const result = await createProduct(event, {} as Context, () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
         expect(parsedResult).toBeDefined();
         expect(parsedResult.id).toBeDefined();
@@ -30,7 +29,7 @@ describe('Test createProduct lambda function', () => {
         const event = {
             body: JSON.stringify(body),
         } as APIGatewayProxyEvent;
-        const result = await createProduct(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
+        const result = await createProduct(event, {} as Context, () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
         expect(parsedResult?.message).toBeDefined();
         expect(result.statusCode).toEqual(400);
@@ -45,7 +44,7 @@ describe('Test createProduct lambda function', () => {
         const event = {
             body: JSON.stringify(body),
         } as APIGatewayProxyEvent;
-        const result = await createProduct(event, AWSMockLambdaContext(), () => {}) as APIGatewayProxyResult;
+        const result = await createProduct(event, {} as Context, () => {}) as APIGatewayProxyResult;
         const parsedResult = JSON.parse(result.body);
         expect(parsedResult?.message).toBeDefined();
         expect(result.statusCode).toEqual(400);

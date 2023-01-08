@@ -1,11 +1,11 @@
-import { APIGatewayProxyEvent, APIGatewayProxyHandler } from 'aws-lambda';
+import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import { ScanCommand } from '@aws-sdk/lib-dynamodb';
 
 import { ErrorResponse, GetProductsListResponse } from '@interfaces/api';
 import { BasicProduct, Stock, Product } from '@interfaces/product';
 import { DBClientProvider } from '@utils';
 
-export const getProductsList: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent) => {
+export const getProductsList: APIGatewayProxyHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         console.log('getProductsList', JSON.stringify(event));
         const { REGION, PRODUCTS_TABLE, STOCKS_TABLE } = process.env;
@@ -24,6 +24,9 @@ export const getProductsList: APIGatewayProxyHandler = async (event: APIGatewayP
         const body: GetProductsListResponse = fullProducts;
         return {
             statusCode: 200,
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(body),
         };
     } catch (error: unknown) {
@@ -34,6 +37,9 @@ export const getProductsList: APIGatewayProxyHandler = async (event: APIGatewayP
         const body: ErrorResponse = { message };
         return {
             statusCode: 500,
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(body),
         };
     }
