@@ -16,4 +16,4 @@ export interface Stock {
     count: number;
 }
 
-export interface Product extends Product, Omit<Stock, 'product_id'> {}
+export interface Product extends BasicProduct, Omit<Stock, 'product_id'> {}

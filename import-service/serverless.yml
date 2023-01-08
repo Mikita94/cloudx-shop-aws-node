@@ -1,0 +1,71 @@
+service: import-service
+frameworkVersion: '3'
+
+provider:
+  environment:
+    REGION: eu-central-1
+    IMPORT_BUCKET: cloudx-e-shop-import-bucket
+    LOOKUP_PREFIX: uploaded
+    PARSED_PREFIX: parsed
+  name: aws
+  runtime: nodejs18.x
+  region: ${self:provider.environment.REGION}
+  httpApi:
+    cors: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+            - s3:GetObjectTagging
+            - s3:PutObject
+            - s3:PutObjectTagging
+            - s3:DeleteObject
+          Resource: arn:aws:s3:::${self:provider.environment.IMPORT_BUCKET}/*
+
+functions:
+  importProductsFile:
+    handler: functions/index.importProductsFile
+    events:
+      - httpApi:
+          path: /import
+          method: get
+          queryStringParameters:
+            name:
+              required: true
+              type: string
+              description: Name of the file
+          responseData:
+            200:
+              description: Successful response
+              bodyType: string
+            400:
+              description: Missing request parameters
+              bodyType: ErrorResponse
+            500:
+              description: Unknown server error
+              bodyType: ErrorResponse
+
+  importFileParser:
+    handler: functions/index.importFileParser
+    events:
+      - s3:
+          bucket: ${self:provider.environment.IMPORT_BUCKET}
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: ${self:provider.environment.LOOKUP_PREFIX}/
+          existing: true
+
+plugins:
+  - serverless-export-env
+  - serverless-auto-swagger
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true
+  autoswagger:
+    typefiles: ['./interfaces/api.d.ts']
