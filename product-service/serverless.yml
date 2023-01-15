@@ -6,6 +6,10 @@ provider:
     REGION: eu-central-1
     PRODUCTS_TABLE: Products
     STOCKS_TABLE: Stocks
+    NOTIFICATION_EMAIL: mikita.hlukhau@gmail.com
+    NOTIFICATION_EMAIL2: mikita_hlukhau@epam.com
+    NEW_PRODUCT_SNS_TOPIC_ARN:
+      Ref: createProductTopic
   name: aws
   runtime: nodejs18.x
   region: ${self:provider.environment.REGION}
@@ -18,6 +22,55 @@ provider:
           Action:
             - dynamodb:*
           Resource: arn:aws:dynamodb:${self:provider.environment.REGION}:*:*
+        - Effect: Allow
+          Action:
+            - sns:*
+          Resource: ${self:provider.environment.NEW_PRODUCT_SNS_TOPIC_ARN}
+
+resources:
+  Resources:
+    catalogItemsQueue:
+      Type: AWS::SQS::Queue
+    createProductTopic:
+      Type: AWS::SNS::Topic
+    createProductSubscription:
+      Type: AWS::SNS::Subscription
+      DependsOn:
+        - createProductTopic
+      Properties:
+        Protocol: email
+        Endpoint: ${self:provider.environment.NOTIFICATION_EMAIL}
+        TopicArn:
+          Ref: createProductTopic
+        FilterPolicy:
+          price:
+            - numeric:
+                - '>='
+                - 200
+    createProductSubscription2:
+      Type: AWS::SNS::Subscription
+      DependsOn:
+        - createProductTopic
+      Properties:
+        Protocol: email
+        Endpoint: ${self:provider.environment.NOTIFICATION_EMAIL2}
+        TopicArn:
+          Ref: createProductTopic
+        FilterPolicy:
+          price:
+            - numeric:
+                - '<'
+                - 200
+
+  Outputs:
+    queueUrl:
+      Value:
+        Ref: catalogItemsQueue
+    queueArn:
+      Value:
+        Fn::GetAtt:
+          - catalogItemsQueue
+          - Arn
 
 functions:
   getProductsList:
@@ -68,6 +121,15 @@ functions:
             500:
               description: Unknown server error
               bodyType: ErrorResponse
+  catalogBatchProcess:
+    handler: functions/index.catalogBatchProcess
+    events:
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - catalogItemsQueue
+              - Arn
+          batchSize: 5
 
 plugins:
   - serverless-export-env

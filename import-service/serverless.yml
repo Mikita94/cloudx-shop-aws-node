@@ -7,6 +7,8 @@ provider:
     IMPORT_BUCKET: cloudx-e-shop-import-bucket
     LOOKUP_PREFIX: uploaded
     PARSED_PREFIX: parsed
+    IMPORT_QUEUE_URL: ${param:importQueueUrl}
+    IMPORT_QUEUE_ARN: ${param:importQueueArn}
   name: aws
   runtime: nodejs18.x
   region: ${self:provider.environment.REGION}
@@ -23,6 +25,10 @@ provider:
             - s3:PutObjectTagging
             - s3:DeleteObject
           Resource: arn:aws:s3:::${self:provider.environment.IMPORT_BUCKET}/*
+        - Effect: Allow
+          Action:
+            - sqs:SendMessage
+          Resource: ${self:provider.environment.IMPORT_QUEUE_ARN}
 
 functions:
   importProductsFile:

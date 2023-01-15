@@ -1,5 +1,6 @@
 import { APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult } from 'aws-lambda';
 import { TransactWriteCommand } from "@aws-sdk/lib-dynamodb";
+import { MetadataBearer } from '@aws-sdk/types/dist-types/response';
 import { v4 as uuid } from 'uuid';
 
 import { ErrorResponse } from '@interfaces/api';
@@ -23,18 +24,7 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
         const { title, description, price } = body;
         const id = uuid();
         const product = { id, title, description, price };
-        const { REGION, PRODUCTS_TABLE } = process.env;
-        const transaction = new TransactWriteCommand({
-            TransactItems: [{
-                Put: {
-                    TableName: PRODUCTS_TABLE,
-                    Item: product,
-                },
-            }],
-        });
-        const dbClientProvider = new DBClientProvider({ region: REGION });
-        const result = await dbClientProvider.docClient.send(transaction);
-        dbClientProvider.destroyClients();
+        const result = await uploadProductToDB(product);
         if (result.$metadata.httpStatusCode !== 200) {
             throw new Error('DB error');
         }
@@ -61,11 +51,27 @@ export const createProduct: APIGatewayProxyHandler = async (event: APIGatewayPro
     }
 };
 
+export const uploadProductToDB = async (product: BasicProduct): Promise<MetadataBearer> => {
+    const { REGION, PRODUCTS_TABLE } = process.env;
+    const transaction = new TransactWriteCommand({
+        TransactItems: [{
+            Put: {
+                TableName: PRODUCTS_TABLE,
+                Item: product,
+            },
+        }],
+    });
+    const dbClientProvider = new DBClientProvider({ region: REGION });
+    const result = await dbClientProvider.docClient.send(transaction);
+    dbClientProvider.destroyClients();
+    return result;
+}
+
 const isCorrectType = (type: string, ...args: Array<unknown>): boolean => {
     return args.every(prop => !prop || typeof prop === type);
 }
 
-const isProductValid = (product: BasicProduct): boolean => {
+export const isProductValid = (product: BasicProduct): boolean => {
     const { title, description, price } = product;
     return !!title
         && isCorrectType('string', title, description)

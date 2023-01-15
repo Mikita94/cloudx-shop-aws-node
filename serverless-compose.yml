@@ -1,0 +1,8 @@
+services:
+  product:
+    path: product-service
+  import:
+    path: import-service
+    params:
+      importQueueUrl: ${product.queueUrl}
+      importQueueArn: ${product.queueArn}
