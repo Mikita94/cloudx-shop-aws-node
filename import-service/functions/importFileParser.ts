@@ -1,4 +1,6 @@
 import { CopyObjectCommand, DeleteObjectCommand, GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
+import { MetadataBearer } from '@aws-sdk/types';
 import { S3Event, S3Handler } from 'aws-lambda/trigger/s3';
 import { Stream } from 'stream';
 import csv from 'csv-parser';
@@ -30,12 +32,20 @@ const readCSVObject = async (client: S3Client, bucket: string, key: string): Pro
     await new Promise<void>((resolve, reject) => {
         readStream
             .pipe(csv())
-            .on('data', (data: unknown) => {
-                console.log('Received chunk:', data);
-            })
+            .on('data', (data: unknown) => sendResultToSQS(data))
             .on('end', resolve)
             .on('error', reject);
     });
+}
+
+const sendResultToSQS = async (data: unknown): Promise<MetadataBearer> => {
+    const { REGION, IMPORT_QUEUE_URL } = process.env;
+    const client = new SQSClient({ region: REGION });
+    const command = new SendMessageCommand({
+        QueueUrl: IMPORT_QUEUE_URL,
+        MessageBody: JSON.stringify(data),
+    });
+    return await client.send(command);
 }
 
 const copyObject = async (client: S3Client, bucket: string, copySource: string, key: string): Promise<void> => {

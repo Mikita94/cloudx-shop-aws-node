@@ -1,0 +1,21 @@
+{
+  "name": "cloudx-shop-aws-node",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mikita94/cloudx-shop-aws-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mikita94/cloudx-shop-aws-node/issues"
+  },
+  "homepage": "https://github.com/Mikita94/cloudx-shop-aws-node#readme",
+  "devDependencies": {
+    "@serverless/compose": "^1.3.0"
+  }
+}
