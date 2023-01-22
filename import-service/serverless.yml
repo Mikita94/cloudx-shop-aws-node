@@ -14,6 +14,12 @@ provider:
   region: ${self:provider.environment.REGION}
   httpApi:
     cors: true
+    authorizers:
+      basicAuthorizer:
+        type: request
+        functionArn: 'arn:aws:lambda:${aws:region}:${aws:accountId}:function:authorization-service-${opt:stage, "dev"}-basicAuthorizer'
+        resultTtlInSeconds: 0
+        identitySource: $request.header.Authorization
   iam:
     role:
       statements:
@@ -42,6 +48,8 @@ functions:
               required: true
               type: string
               description: Name of the file
+          authorizer:
+            name: basicAuthorizer
           responseData:
             200:
               description: Successful response
