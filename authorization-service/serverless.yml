@@ -1,0 +1,26 @@
+service: authorization-service
+frameworkVersion: '3'
+
+provider:
+  environment:
+    REGION: eu-central-1
+  name: aws
+  runtime: nodejs18.x
+  region: ${self:provider.environment.REGION}
+  httpApi:
+    cors: true
+
+functions:
+  basicAuthorizer:
+    handler: functions/index.basicAuthorizer
+
+plugins:
+  - serverless-export-env
+  - serverless-webpack
+  - serverless-dotenv-plugin
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
+    packager: 'npm'
+    includeModules: true

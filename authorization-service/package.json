@@ -1,0 +1,22 @@
+{
+  "name": "import-service",
+  "version": "1.0.0",
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.109",
+    "aws-crt": "^1.15.5",
+    "aws-lambda": "^1.0.7",
+    "dotenv": "^16.0.3",
+    "serverless-dotenv-plugin": "^4.0.2",
+    "serverless-export-env": "^2.2.0",
+    "serverless-webpack": "^5.11.0",
+    "ts-loader": "^9.4.2",
+    "tsconfig-paths-webpack-plugin": "^4.0.0",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0"
+  }
+}

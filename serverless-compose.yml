@@ -6,3 +6,5 @@ services:
     params:
       importQueueUrl: ${product.queueUrl}
       importQueueArn: ${product.queueArn}
+  authorization:
+    path: authorization-service
