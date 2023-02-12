@@ -4,12 +4,16 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+const apiMap = {
+    '/api/profile/cart': 'cart',
+};
+
 app.use(express.json());
 
 app.all('/*', (req, res) => {
     const { originalUrl, method, body } = req;
-    const apiName = originalUrl.split('/')[1];
-    const recipientUrl = process.env[apiName];
+    const apiName = apiMap[originalUrl] || originalUrl.split('/')[1];
+    const recipientUrl = process.env[apiName] || process.env[originalUrl];
     if (!recipientUrl) {
         res.status(502).json({ error: 'Cannot process request' });
         return;
